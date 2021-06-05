@@ -20,3 +20,12 @@ jobs:
 
       - name: Check pip Version
         run: pip --version
+        
+      - name: Install PyInstaller
+        run: pip install pyinstaller
+        
+      - name: Check PyInstaller Version
+        run: pyinstaller --version
+        
+      - name: Create .exe File
+        run: pyinstaller --noconsole --onefile --name "phue-racing-flags" gui.py
