@@ -1,12 +1,8 @@
-name: Build Distributable
+name: Build & Release Distributable
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-    
-  workflow_dispatch:
+    branches: [ release ]
 
 jobs:
   build:
@@ -14,18 +10,28 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-
+      
       - name: Check Python Version
         run: python --version
-
       - name: Check pip Version
         run: pip --version
-        
       - name: Install PyInstaller
         run: pip install pyinstaller
-        
       - name: Check PyInstaller Version
         run: pyinstaller --version
-        
       - name: Create .exe File
         run: pyinstaller --noconsole --onefile --name "phue-racing-flags" gui.py
+      - name: Bump Version and Push Tag
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v5.5
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: Release.txt
+          tag_name: ${{ steps.tag_version.outputs.new_tag }}
+          release_name: Release ${{ steps.tag_version.outputs.new_tag }}
+          body: ${{ steps.tag_version.outputs.changelog }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
