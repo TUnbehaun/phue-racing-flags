@@ -7,7 +7,7 @@ import time
 
 
 # Global Variables
-SAVE_FILE_PATH = './sf.json'
+SAVE_FILE_PATH = './phue-rf-save.json'
 HUE_CONNECTION = {
     'ip': '',
     'lights': [],
