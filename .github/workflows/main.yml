@@ -29,7 +29,7 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          files: Release.txt
+          files: D:\a\phue-racing-flags\phue-racing-flags\dist\phue-racing-flags.exe
           tag_name: ${{ steps.tag_version.outputs.new_tag }}
           release_name: Release ${{ steps.tag_version.outputs.new_tag }}
           body: ${{ steps.tag_version.outputs.changelog }}
