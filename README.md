@@ -12,7 +12,7 @@ The design of the app tries to resemble the design of motorsport dashboards like
 
 ## How do I use it?
 
-1. Download the .exe file from here: https://github.com/TUnbehaun/phue-racing-flags/releases/download/v0.1/PhilipsHueRacingFlags.exe
+1. Download the .exe file from here: https://github.com/TUnbehaun/phue-racing-flags/releases/latest/download/phue-racing-flags.exe
 2. Run the .exe file
 3. Enter the IP Address of your Philips Hue Bridge in the "bridge ip" input field.
 (You can find the IP Address of your Bridge in the interface of your Router)

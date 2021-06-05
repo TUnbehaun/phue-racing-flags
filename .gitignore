@@ -1,4 +1,5 @@
 .idea/*
 sf.json
+phue-rf-save.json
 __pycache__/*
 external/__pycache__/*
