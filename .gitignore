@@ -1,0 +1,4 @@
+.idea/*
+sf.json
+__pycache__/*
+external/__pycache__/*

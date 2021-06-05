@@ -1,7 +1,6 @@
+import external.PySimpleGUI as sg
+from external.phue import Bridge
 import threading
-
-import PySimpleGUI as sg
-from phue import Bridge
 import json
 import acc
 import time
