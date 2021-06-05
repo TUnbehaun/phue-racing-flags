@@ -10,7 +10,7 @@ import time
 SAVE_FILE_PATH = './sf.json'
 HUE_CONNECTION = {
     'ip': '',
-    'light': '',
+    'lights': [],
     'brightness': 255
 }
 STOP_SYNC: bool
@@ -65,7 +65,7 @@ def open_window():
     # GUI Frames
 
     flag_frame_layout = [
-        [sg.Graph(canvas_size=(895, 100), graph_bottom_left=(0, 0), graph_top_right=(895, 100), background_color=GUI_COLOR_NO_FLAG, key='CANVAS_FLAG')]
+        [sg.Graph(canvas_size=(875, 100), graph_bottom_left=(0, 0), graph_top_right=(875, 100), background_color=GUI_COLOR_NO_FLAG, key='CANVAS_FLAG')]
     ]
 
     bridge_ip_frame_layout = [
@@ -73,11 +73,11 @@ def open_window():
     ]
 
     bridge_status_frame_layout = [
-        [sg.Text(size=(23, 1), key='MSG_BRIDGE', text=msg_bridge, font=('Helvetica', 24))]
+        [sg.Text(size=(22, 1), key='MSG_BRIDGE', text=msg_bridge, font=('Helvetica', 24))]
     ]
 
     light_menu_frame_layout = [
-        [sg.Combo(values=light_options, key='MENU_LIGHT', disabled=disable_lights_menu, default_value=HUE_CONNECTION['light'], enable_events=True, font=('Helvetica', 24))]
+        [sg.Listbox(values=light_options, key='MENU_LIGHT', disabled=disable_lights_menu, default_values=HUE_CONNECTION['lights'], enable_events=True, font=('Helvetica', 24), size=(23, 4), select_mode='multiple')]
     ]
 
     brightness_menu_frame_layout = [
@@ -89,13 +89,13 @@ def open_window():
         [sg.Button('Checkered Flag', key='BTN_CHECKERED_FLAG', button_color=('#ffffff', GUI_COLOR_CHECKERED_FLAG), disabled=disable_lights_menu, font=('Helvetica', 24)), sg.Button('Penalty Flag', key='BTN_PENALTY_FLAG', button_color=('#ffffff', GUI_COLOR_PENALTY_FLAG), disabled=disable_lights_menu, font=('Helvetica', 24)), sg.Button('Green Flag', key='BTN_GREEN_FLAG', button_color=('#ffffff', GUI_COLOR_GREEN_FLAG), disabled=disable_lights_menu, font=('Helvetica', 24)), sg.Button('Orange Flag', key='BTN_ORANGE_FLAG', button_color=('#ffffff', GUI_COLOR_ORANGE_FLAG), disabled=disable_lights_menu, font=('Helvetica', 24))]
     ]
 
-    acc_status_frame_layout = [
-        [sg.Text(size=(30, 1), key='MSG_ACC_SYNC_STATUS', text='Stopped.', font=('Helvetica', 24))]
-    ]
-
     acc_controls_frame_layout = [
         [sg.Button('Start', key='BTN_ACC_START', disabled=disable_lights_menu, font=('Helvetica', 24)),
          sg.Button('Stop', key='BTN_ACC_STOP', disabled=disable_lights_menu, font=('Helvetica', 24))]
+    ]
+
+    acc_status_frame_layout = [
+        [sg.Text(size=(34, 1), key='MSG_ACC_SYNC_STATUS', text='Stopped.', font=('Helvetica', 24))]
     ]
 
     # Window Layout
@@ -103,7 +103,7 @@ def open_window():
     layout = [
         [sg.Frame('flag', flag_frame_layout, font=('Helvetica', 10), title_color='#ffffff')],
         [sg.Frame('bridge ip', bridge_ip_frame_layout, font=('Helvetica', 10), title_color='#ffffff'), sg.Frame('bridge status', bridge_status_frame_layout, font=('Helvetica', 10), title_color='#ffffff')],
-        [sg.Frame('light', light_menu_frame_layout, font=('Helvetica', 10), title_color='#ffffff'), sg.Frame('brightness', brightness_menu_frame_layout, font=('Helvetica', 10), title_color='#ffffff')],
+        [sg.Frame('lights', light_menu_frame_layout, font=('Helvetica', 10), title_color='#ffffff'), sg.Frame('brightness', brightness_menu_frame_layout, font=('Helvetica', 10), title_color='#ffffff')],
         [sg.Frame('flag test', color_test_frame_layout, font=('Helvetica', 10), title_color='#ffffff')],
         [sg.Frame('acc sync', acc_controls_frame_layout, font=('Helvetica', 10), title_color='#ffffff'), sg.Frame('sync status', acc_status_frame_layout, font=('Helvetica', 10), title_color='#ffffff')],
         [sg.Text('If you are connecting this app to your Bridge for the first time, you have to press the Pairing Button on your Bridge and then connect within 30 seconds.', size=(80, 2), text_color='#b71c1c', key='MSG_30_SECONDS', visible=show_30_seconds_info)],
@@ -116,7 +116,7 @@ def open_window():
 
         if event == 'BTN_BRIDGE':
             HUE_CONNECTION['ip'] = values['INPUT_IP']
-            window['MENU_LIGHT'].update('')
+            window['MENU_LIGHT'].update([])
             if (bridge_connection_works()):
                 save_hue_connection_to_file()
                 bridge = Bridge(HUE_CONNECTION['ip'])
@@ -125,7 +125,7 @@ def open_window():
                 disable_interface(window)
 
         if event == 'MENU_LIGHT':
-            HUE_CONNECTION['light'] = values['MENU_LIGHT']
+            HUE_CONNECTION['lights'] = values['MENU_LIGHT']
             save_hue_connection_to_file()
 
         if event == 'SLIDER_BRIGHTNESS':
@@ -217,12 +217,12 @@ def load_hue_connection_from_file():
         save_file = open(SAVE_FILE_PATH, 'r')
         data = json.load(save_file)
         HUE_CONNECTION['ip'] = data['ip']
-        HUE_CONNECTION['light'] = data['light']
+        HUE_CONNECTION['lights'] = data['lights']
         HUE_CONNECTION['brightness'] = data['brightness']
     except FileNotFoundError as error:
         print(error)
         HUE_CONNECTION['ip'] = ''
-        HUE_CONNECTION['light'] = ''
+        HUE_CONNECTION['lights'] = ''
         HUE_CONNECTION['brightness'] = 255
 
 
@@ -257,31 +257,40 @@ def sync_color(bridge: Bridge, window: sg.Window):
 
 def raise_flag(flag: acc.ACCFlagType, bridge: Bridge, window: sg.Window):
     if flag == acc.ACCFlagType.ACC_NO_FLAG:
-        bridge.set_light(HUE_CONNECTION['light'], {'transitiontime': 0, 'on': False})
+        for light in HUE_CONNECTION['lights']:
+            bridge.set_light(light, {'transitiontime': 0, 'on': False})
         window['CANVAS_FLAG'].update(background_color=GUI_COLOR_NO_FLAG)
     if flag == acc.ACCFlagType.ACC_BLUE_FLAG:
-        bridge.set_light(HUE_CONNECTION['light'], {'transitiontime': 0, 'on': True, 'bri': int(HUE_CONNECTION['brightness']), 'xy': HUE_COLOR_BLUE_FLAG})
+        for light in HUE_CONNECTION['lights']:
+            bridge.set_light(light, {'transitiontime': 0, 'on': True, 'bri': int(HUE_CONNECTION['brightness']), 'xy': HUE_COLOR_BLUE_FLAG})
         window['CANVAS_FLAG'].update(background_color=GUI_COLOR_BLUE_FLAG)
     if flag == acc.ACCFlagType.ACC_YELLOW_FLAG:
-        bridge.set_light(HUE_CONNECTION['light'], {'transitiontime': 0, 'on': True, 'bri': int(HUE_CONNECTION['brightness']), 'xy': HUE_COLOR_YELLOW_FLAG})
+        for light in HUE_CONNECTION['lights']:
+            bridge.set_light(light, {'transitiontime': 0, 'on': True, 'bri': int(HUE_CONNECTION['brightness']), 'xy': HUE_COLOR_YELLOW_FLAG})
         window['CANVAS_FLAG'].update(background_color=GUI_COLOR_YELLOW_FLAG)
     if flag == acc.ACCFlagType.ACC_BLACK_FLAG:
-        bridge.set_light(HUE_CONNECTION['light'], {'transitiontime': 0, 'on': False})
+        for light in HUE_CONNECTION['lights']:
+            bridge.set_light(light, {'transitiontime': 0, 'on': False})
         window['CANVAS_FLAG'].update(background_color=GUI_COLOR_BLACK_FLAG)
     if flag == acc.ACCFlagType.ACC_WHITE_FLAG:
-        bridge.set_light(HUE_CONNECTION['light'], {'transitiontime': 0, 'on': True, 'bri': int(HUE_CONNECTION['brightness']), 'xy': HUE_COLOR_WHITE_FLAG})
+        for light in HUE_CONNECTION['lights']:
+            bridge.set_light(light, {'transitiontime': 0, 'on': True, 'bri': int(HUE_CONNECTION['brightness']), 'xy': HUE_COLOR_WHITE_FLAG})
         window['CANVAS_FLAG'].update(background_color=GUI_COLOR_WHITE_FLAG)
     if flag == acc.ACCFlagType.ACC_CHECKERED_FLAG:
-        bridge.set_light(HUE_CONNECTION['light'], {'transitiontime': 0, 'on': False})
+        for light in HUE_CONNECTION['lights']:
+            bridge.set_light(light, {'transitiontime': 0, 'on': False})
         window['CANVAS_FLAG'].update(background_color=GUI_COLOR_CHECKERED_FLAG)
     if flag == acc.ACCFlagType.ACC_PENALTY_FLAG:
-        bridge.set_light(HUE_CONNECTION['light'], {'transitiontime': 0, 'on': True, 'bri': int(HUE_CONNECTION['brightness']), 'xy': HUE_COLOR_PENALTY_FLAG})
+        for light in HUE_CONNECTION['lights']:
+            bridge.set_light(light, {'transitiontime': 0, 'on': True, 'bri': int(HUE_CONNECTION['brightness']), 'xy': HUE_COLOR_PENALTY_FLAG})
         window['CANVAS_FLAG'].update(background_color=GUI_COLOR_PENALTY_FLAG)
     if flag == acc.ACCFlagType.ACC_GREEN_FLAG:
-        bridge.set_light(HUE_CONNECTION['light'], {'transitiontime': 0, 'on': True, 'bri': int(HUE_CONNECTION['brightness']), 'xy': HUE_COLOR_GREEN_FLAG})
+        for light in HUE_CONNECTION['lights']:
+            bridge.set_light(light, {'transitiontime': 0, 'on': True, 'bri': int(HUE_CONNECTION['brightness']), 'xy': HUE_COLOR_GREEN_FLAG})
         window['CANVAS_FLAG'].update(background_color=GUI_COLOR_GREEN_FLAG)
     if flag == acc.ACCFlagType.ACC_ORANGE_FLAG:
-        bridge.set_light(HUE_CONNECTION['light'], {'transitiontime': 0, 'on': True, 'bri': int(HUE_CONNECTION['brightness']), 'xy': HUE_COLOR_ORANGE_FLAG})
+        for light in HUE_CONNECTION['lights']:
+            bridge.set_light(light, {'transitiontime': 0, 'on': True, 'bri': int(HUE_CONNECTION['brightness']), 'xy': HUE_COLOR_ORANGE_FLAG})
         window['CANVAS_FLAG'].update(background_color=GUI_COLOR_ORANGE_FLAG)
 
 
