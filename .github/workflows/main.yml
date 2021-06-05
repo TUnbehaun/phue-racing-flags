@@ -1,0 +1,22 @@
+name: Build Distributable
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+    
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Check Python Version
+        run: python --version
+
+      - name: Check pip Version
+        run: pip --version
