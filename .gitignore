@@ -3,3 +3,4 @@ sf.json
 phue-rf-save.json
 __pycache__/*
 external/__pycache__/*
+external/modified/__pycache__/*
