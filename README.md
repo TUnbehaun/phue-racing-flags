@@ -57,7 +57,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-![grafik](https://user-images.githubusercontent.com/12392728/120937234-b11dfe80-c70c-11eb-87bf-3c58046e0905.png)
+![grafik](https://user-images.githubusercontent.com/12392728/121082761-dd09b480-c7de-11eb-9910-a92b2ad0bb71.png)
 
 One Friday evening I thought to myself that it would be pretty sweet to use my Philips Hue lights as indicators for the racing flags inside of Assetto Corsa Competizione. As no app was available to achieve this, I decided to take matters into my own hand and create one.
 
@@ -68,6 +68,7 @@ One Friday evening I thought to myself that it would be pretty sweet to use my P
 ## Supported Systems and Racing Simulators
 
 The app is designed for Windows and currently supports the following racing simulators:
+* [Assetto Corsa](https://www.assettocorsa.it/home-ac/)
 * [Assetto Corsa Competizione](https://www.assettocorsa.it/competizione/)
 * [iRacing](https://www.iracing.com/)
 
