@@ -6,6 +6,10 @@
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
+  <a href="https://github.com/othneildrew/Best-README-Template">
+    <img src="https://user-images.githubusercontent.com/12392728/121068151-32889600-c7cc-11eb-8343-7c7238debc89.PNG" alt="Logo" width="140" height="140">
+  </a>
+
   <h3 align="center">phue-racing-flags</h3>
 
   <p align="center">
