@@ -20,7 +20,7 @@ jobs:
       - name: Check PyInstaller Version
         run: pyinstaller --version
       - name: Create .exe File
-        run: pyinstaller --noconsole --onefile --name "phue-racing-flags" --add-data images/icon.ico:images gui.py
+        run: pyinstaller --noconsole --onefile --name "phue-racing-flags" --add-data "images/icon.ico;images" gui.py
       - name: Bump Version and Push Tag
         id: tag_version
         uses: mathieudutour/github-tag-action@v5.5
