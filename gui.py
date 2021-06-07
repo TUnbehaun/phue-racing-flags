@@ -170,7 +170,7 @@ def open_window():
             size=(80, 2), text_color='#b71c1c', key='MSG_30_SECONDS', visible=show_30_seconds_info)],
     ]
 
-    window = sg.Window('phue-racing-flags', layout, font='Helvetica', finalize=True)
+    window = sg.Window('phue-racing-flags', layout, icon='icon.ico', font='Helvetica', finalize=True)
 
     while True:
         event, values = window.read()
