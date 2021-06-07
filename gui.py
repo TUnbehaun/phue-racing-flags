@@ -1,5 +1,6 @@
 import external.PySimpleGUI as sg
 from external.phue import Bridge
+from data import images
 import acc
 import iracing
 import threading
@@ -170,7 +171,7 @@ def open_window():
             size=(80, 2), text_color='#b71c1c', key='MSG_30_SECONDS', visible=show_30_seconds_info)],
     ]
 
-    window = sg.Window('phue-racing-flags', layout, font='Helvetica', finalize=True)
+    window = sg.Window('phue-racing-flags', layout, icon=images, font='Helvetica', finalize=True)
 
     while True:
         event, values = window.read()
