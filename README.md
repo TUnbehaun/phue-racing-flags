@@ -59,7 +59,7 @@
 
 ![grafik](https://user-images.githubusercontent.com/12392728/121082761-dd09b480-c7de-11eb-9910-a92b2ad0bb71.png)
 
-One Friday evening I thought to myself that it would be pretty sweet to use my Philips Hue lights as indicators for the racing flags inside of Assetto Corsa Competizione. As no app was available to achieve this, I decided to take matters into my own hand and create one.
+One Friday evening I thought to myself that it would be pretty sweet to use my Philips Hue lights as indicators for the racing flags inside of Assetto Corsa Competizione. As no app was available to achieve this, I decided to take matters into my own hands and create one.
 
 ### Built With
 
@@ -151,6 +151,7 @@ Project Link: [https://github.com/TUnbehaun/phue-racing-flags](https://github.co
 * [PySimpleGui](https://github.com/PySimpleGUI/PySimpleGUI)
 * [PyInstaller](http://www.pyinstaller.org/)
 * [pyirsdk](https://github.com/kutu/pyirsdk)
+* [hue-python-rgb-converter](https://github.com/benknight/hue-python-rgb-converter)
 
 ## Disclaimer
 
