@@ -65,7 +65,7 @@ def get_flag() -> IRacingGUIFlagType:
             gui_flags.append(IRacingGUIFlagType.IRACING_MEATBALL_FLAG)
         if IRacingMemoryFlagType.black in memory_flags:
             gui_flags.append(IRacingGUIFlagType.IRACING_BLACK_FLAG)
-        if IRacingMemoryFlagType.yellow in memory_flags:
+        if IRacingMemoryFlagType.yellow in memory_flags or IRacingMemoryFlagType.yellow_waving in memory_flags:
             gui_flags.append(IRacingGUIFlagType.IRACING_YELLOW_FLAG)
         if IRacingMemoryFlagType.green in memory_flags:
             gui_flags.append(IRacingGUIFlagType.IRACING_GREEN_FLAG)
