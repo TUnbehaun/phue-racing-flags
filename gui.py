@@ -82,7 +82,7 @@ def open_window():
 
     converter = Converter()
 
-    disable_lights_menu = True
+    disable_due_to_failed_connection = True
     show_30_seconds_info = False
     msg_bridge = ''
 
@@ -94,39 +94,43 @@ def open_window():
     load_hue_connection_from_file()
 
     if bridge_connection_works():
-        disable_lights_menu = False
+        disable_due_to_failed_connection = False
         msg_bridge = 'Connection established.'
         bridge = Bridge(HUE_CONNECTION['ip'])
         light_options = get_lights_from_bridge(bridge)
         show_30_seconds_info = False
     else:
-        disable_lights_menu = True
+        disable_due_to_failed_connection = True
         msg_bridge = 'Connection failed.'
         show_30_seconds_info = True
 
     # GUI Frames
 
     flag_frame_layout = [
-        [sg.Graph(canvas_size=(650, 100), graph_bottom_left=(0, 0), graph_top_right=(650, 100),
+        [sg.Graph(canvas_size=(870, 100), graph_bottom_left=(0, 0), graph_top_right=(870, 100),
                   background_color=GUI_COLOR_NO_FLAG, key='CANVAS_FLAG')]
     ]
 
     bridge_status_frame_layout = [
-        [sg.Text('Bridge status:', size=(15, 1), font=('Helvetica', 24)), sg.Text(size=(22, 1), key='MSG_BRIDGE', text=msg_bridge, font=('Helvetica', 24)), sg.Button('Settings', key='BTN_OPEN_SETTINGS', font=('Helvetica', 24))]
+        [sg.Text('Bridge status:', size=(10, 1), font=('Helvetica', 24)),
+         sg.Text(size=(22, 1), key='MSG_BRIDGE', text=msg_bridge, font=('Helvetica', 24)),
+         sg.Button('Open Settings', key='BTN_OPEN_SETTINGS', font=('Helvetica', 24))]
     ]
 
     sim_select_frame_layout = [
-        [sg.Radio('Assetto Corsa', 'SIM_SELECT', font=('Helvetica', 24), disabled=disable_lights_menu,
+        [sg.Radio('Assetto Corsa', 'SIM_SELECT', font=('Helvetica', 24), disabled=disable_due_to_failed_connection,
                   key='SIM_SELECT_AC', enable_events=True, default=HUE_CONNECTION['sim'] == 'AC'),
-         sg.Radio('Assetto Corsa Competizione', 'SIM_SELECT', font=('Helvetica', 24), disabled=disable_lights_menu,
+         sg.Radio('Assetto Corsa Competizione', 'SIM_SELECT', font=('Helvetica', 24),
+                  disabled=disable_due_to_failed_connection,
                   key='SIM_SELECT_ACC', enable_events=True, default=HUE_CONNECTION['sim'] == 'ACC'),
-         sg.Radio('iRacing', 'SIM_SELECT', font=('Helvetica', 24), size=(8, 1), disabled=disable_lights_menu,
+         sg.Radio('iRacing', 'SIM_SELECT', font=('Helvetica', 24), size=(8, 1),
+                  disabled=disable_due_to_failed_connection,
                   key='SIM_SELECT_IRACING', enable_events=True, default=HUE_CONNECTION['sim'] == 'iRacing')]
     ]
 
     sync_controls_frame_layout = [
-        [sg.Button('Start', key='BTN_SYNC_START', disabled=disable_lights_menu, font=('Helvetica', 24)),
-         sg.Button('Stop', key='BTN_SYNC_STOP', disabled=disable_lights_menu, font=('Helvetica', 24))]
+        [sg.Button('Start', key='BTN_SYNC_START', disabled=disable_due_to_failed_connection, font=('Helvetica', 24)),
+         sg.Button('Stop', key='BTN_SYNC_STOP', disabled=disable_due_to_failed_connection, font=('Helvetica', 24))]
     ]
 
     sync_status_frame_layout = [
@@ -140,7 +144,7 @@ def open_window():
 
     frame_general_lights_layout = [
         [sg.Text('Lights to use:', size=(15, 1)),
-         sg.Listbox(values=light_options, key='MENU_LIGHT', disabled=disable_lights_menu,
+         sg.Listbox(values=light_options, key='MENU_LIGHT', disabled=disable_due_to_failed_connection,
                     default_values=HUE_CONNECTION['lights'], enable_events=True,
                     select_mode='multiple', size=(20, 5))],
         [sg.Text('Brightness:', size=(15, 1)),
@@ -149,13 +153,14 @@ def open_window():
     ]
 
     frame_general_sync_layout = [
-        [sg.Checkbox('Start sync on app startup', default=HUE_CONNECTION['auto_sync'], key='CHECKBOX_AUTO_SYNC', enable_events=True)]
+        [sg.Checkbox('Start live sync on app startup', default=HUE_CONNECTION['auto_sync'], key='CHECKBOX_AUTO_SYNC',
+                     enable_events=True)]
     ]
 
     tab_general_layout = [
         [sg.Frame('bridge', frame_general_bridge_layout, font=('Helvetica', 10), title_color='#ffffff')],
         [sg.Frame('lights', frame_general_lights_layout, font=('Helvetica', 10), title_color='#ffffff')],
-        [sg.Frame('sync', frame_general_sync_layout, font=('Helvetica', 10), title_color='#ffffff')]
+        [sg.Frame('live sync', frame_general_sync_layout, font=('Helvetica', 10), title_color='#ffffff')]
     ]
 
     assetto_corsa_flags = [
@@ -247,61 +252,71 @@ def open_window():
     ]
 
     frame_settings_layout = [
-        [sg.TabGroup([[sg.Tab('General', tab_general_layout), sg.Tab('Assetto Corsa', tab_assetto_corsa_layout),
-                       sg.Tab('Assetto Corsa Competizione', tab_assetto_corsa_competizione_layout),
-                       sg.Tab('iRacing', tab_iracing_layout)]])]
+        [sg.TabGroup([[sg.Tab('General', tab_general_layout),
+                       sg.Tab('Assetto Corsa', tab_assetto_corsa_layout, disabled=disable_due_to_failed_connection,
+                              key='TAB_SETTINGS_ASSETTO_CORSA'),
+                       sg.Tab('Assetto Corsa Competizione', tab_assetto_corsa_competizione_layout,
+                              disabled=disable_due_to_failed_connection, key='TAB_SETTINGS_ASSETTO_CORSA_COMPETIZIONE'),
+                       sg.Tab('iRacing', tab_iracing_layout, disabled=disable_due_to_failed_connection,
+                              key='TAB_SETTINGS_IRACING')]])]
     ]
 
     # Window Layout
 
     layout = [
-        [sg.Frame('general', bridge_status_frame_layout, font=('Helvetica', 10), title_color='#ffffff')],
-        [sg.Text(
-            'Check Settings -> General -> Bridge IP', size=(80, 2), text_color='#b71c1c', key='MSG_30_SECONDS',
-            visible=show_30_seconds_info)],
-        [sg.Frame('flag', flag_frame_layout, font=('Helvetica', 10), title_color='#ffffff')],
-        [sg.pin(sg.Frame('settings', frame_settings_layout, font=('Helvetica', 10), title_color='#ffffff', visible=show_settings, key='FRAME_SETTINGS'))],
-        [sg.pin(sg.Frame('sim', sim_select_frame_layout, font=('Helvetica', 10), title_color='#ffffff', visible=(not show_settings), key='FRAME_SIM'))],
-        [sg.pin(sg.Frame('live sync', sync_controls_frame_layout, font=('Helvetica', 10), title_color='#ffffff', visible=(not show_settings), key='FRAME_SYNC_CONTROLS')),
-         sg.pin(sg.Frame('sync status', sync_status_frame_layout, font=('Helvetica', 10), title_color='#ffffff', visible=(not show_settings), key='FRAME_SYNC_STATUS'))]
+        [sg.pin(sg.Frame('general', bridge_status_frame_layout, font=('Helvetica', 10), title_color='#ffffff'))],
+        [sg.pin(sg.Text(
+            'Check Settings -> General -> Bridge IP\n\nIf you are connecting this app to your Bridge for the first time, you have to press the Pairing Button on your Bridge and then connect within 30 seconds.',
+            size=(80, 4), text_color='#b71c1c', key='MSG_30_SECONDS',
+            visible=show_30_seconds_info))],
+        [sg.pin(sg.Frame('flag', flag_frame_layout, font=('Helvetica', 10), title_color='#ffffff'))],
+        [sg.pin(sg.Frame('settings', frame_settings_layout, font=('Helvetica', 10), title_color='#ffffff',
+                         visible=show_settings, key='FRAME_SETTINGS'))],
+        [sg.pin(sg.Frame('sim', sim_select_frame_layout, font=('Helvetica', 10), title_color='#ffffff',
+                         visible=(not show_settings), key='FRAME_SIM'))],
+        [sg.pin(sg.Frame('live sync', sync_controls_frame_layout, font=('Helvetica', 10), title_color='#ffffff',
+                         visible=(not show_settings), key='FRAME_SYNC_CONTROLS')),
+         sg.pin(sg.Frame('sync status', sync_status_frame_layout, font=('Helvetica', 10), title_color='#ffffff',
+                         visible=(not show_settings), key='FRAME_SYNC_STATUS'))]
     ]
 
     window = sg.Window('phue-racing-flags', layout, icon=images, font='Helvetica', finalize=True)
 
     if bridge_connection_works() and HUE_CONNECTION['auto_sync'] is True:
-        start_sync(bridge, window)
+        if len(HUE_CONNECTION['lights']) == 0:
+            show_error_window('No lights selected. Select lights under Settings -> General - Lights')
+        else:
+            window['MSG_SYNC_STATUS'].update('Running.')
+            thread = threading.Thread(target=start_sync, args=(bridge, window,))
+            thread.start()
 
     while True:
         event, values = window.read()
 
+        # Main View
+
         if event == 'SIM_SELECT_AC':
             stop_sync()
             HUE_CONNECTION['sim'] = 'AC'
-            window['FRAME_AC_FLAGS'].update(visible=True)
-            window['FRAME_ACC_FLAGS'].update(visible=False)
-            window['FRAME_IRACING_FLAGS'].update(visible=False)
             save_hue_connection_to_file()
 
         if event == 'SIM_SELECT_ACC':
             stop_sync()
             HUE_CONNECTION['sim'] = 'ACC'
-            window['FRAME_AC_FLAGS'].update(visible=False)
-            window['FRAME_ACC_FLAGS'].update(visible=True)
-            window['FRAME_IRACING_FLAGS'].update(visible=False)
             save_hue_connection_to_file()
 
         if event == 'SIM_SELECT_IRACING':
             stop_sync()
             HUE_CONNECTION['sim'] = 'iRacing'
-            window['FRAME_AC_FLAGS'].update(visible=False)
-            window['FRAME_ACC_FLAGS'].update(visible=False)
-            window['FRAME_IRACING_FLAGS'].update(visible=True)
             save_hue_connection_to_file()
 
         if event == 'BTN_SYNC_START':
-            window['MSG_SYNC_STATUS'].update('Running.')
-            thread = threading.Thread(target=start_sync, args=(bridge, window,))
-            thread.start()
+            if len(HUE_CONNECTION['lights']) == 0:
+                show_error_window('No lights selected. Select lights under Settings -> General - Lights')
+            else:
+                window['MSG_SYNC_STATUS'].update('Running.')
+                thread = threading.Thread(target=start_sync, args=(bridge, window,))
+                thread.start()
 
         if event == 'BTN_SYNC_STOP':
             stop_sync()
@@ -312,6 +327,12 @@ def open_window():
             window['FRAME_SIM'].update(visible=(not show_settings))
             window['FRAME_SYNC_CONTROLS'].update(visible=(not show_settings))
             window['FRAME_SYNC_STATUS'].update(visible=(not show_settings))
+            if show_settings:
+                window['BTN_OPEN_SETTINGS'].update(text='Close Settings')
+            else:
+                window['BTN_OPEN_SETTINGS'].update(text='Open Settings')
+
+        # General Settings
 
         if event == 'BTN_BRIDGE':
             HUE_CONNECTION['ip'] = values['INPUT_IP']
@@ -330,6 +351,12 @@ def open_window():
         if event == 'SLIDER_BRIGHTNESS':
             HUE_CONNECTION['brightness'] = values['SLIDER_BRIGHTNESS']
             save_hue_connection_to_file()
+
+        if event == 'CHECKBOX_AUTO_SYNC':
+            HUE_CONNECTION['auto_sync'] = values['CHECKBOX_AUTO_SYNC']
+            save_hue_connection_to_file()
+
+        # Assetto Corsa Settings
 
         for flag in assetto_corsa_flags:
             if event == 'BTN_TEST_ASSETTO_CORSA_' + flag.replace(' ', '_'):
@@ -352,10 +379,15 @@ def open_window():
                 window['CANVAS_ASSETTO_CORSA_' + flag.replace(' ', '_')].update(
                     background_color='#000000')
                 save_hue_connection_to_file()
-            if event == 'INPUT_COLOR_ASSETTO_CORSA_' + flag.replace(' ', '_'):
-                HUE_CONNECTION['colors']['AC'][flag.replace(' ', '_')] = values['INPUT_COLOR_ASSETTO_CORSA_' + flag.replace(' ', '_')]
-                window['CANVAS_ASSETTO_CORSA_' + flag.replace(' ', '_')].update(background_color=values['INPUT_COLOR_ASSETTO_CORSA_' + flag.replace(' ', '_')])
+            if event == 'INPUT_COLOR_ASSETTO_CORSA_' + flag.replace(' ', '_') and values[
+                'INPUT_COLOR_ASSETTO_CORSA_' + flag.replace(' ', '_')] != 'None':
+                HUE_CONNECTION['colors']['AC'][flag.replace(' ', '_')] = values[
+                    'INPUT_COLOR_ASSETTO_CORSA_' + flag.replace(' ', '_')]
+                window['CANVAS_ASSETTO_CORSA_' + flag.replace(' ', '_')].update(
+                    background_color=values['INPUT_COLOR_ASSETTO_CORSA_' + flag.replace(' ', '_')])
                 save_hue_connection_to_file()
+
+        # Assetto Corsa Competizione Settings
 
         for flag in assetto_corsa_competizione_flags:
             if event == 'BTN_TEST_ASSETTO_CORSA_COMPETIZIONE_' + flag.replace(' ', '_'):
@@ -382,10 +414,15 @@ def open_window():
                 window['CANVAS_ASSETTO_CORSA_COMPETIZIONE_' + flag.replace(' ', '_')].update(
                     background_color='#000000')
                 save_hue_connection_to_file()
-            if event == 'INPUT_COLOR_ASSETTO_CORSA_COMPETIZIONE_' + flag.replace(' ', '_'):
-                HUE_CONNECTION['colors']['ACC'][flag.replace(' ', '_')] = values['INPUT_COLOR_ASSETTO_CORSA_COMPETIZIONE_' + flag.replace(' ', '_')]
-                window['CANVAS_ASSETTO_CORSA_COMPETIZIONE_' + flag.replace(' ', '_')].update(background_color=values['INPUT_COLOR_ASSETTO_CORSA_COMPETIZIONE_' + flag.replace(' ', '_')])
+            if event == 'INPUT_COLOR_ASSETTO_CORSA_COMPETIZIONE_' + flag.replace(' ', '_') and values[
+                'INPUT_COLOR_ASSETTO_CORSA_COMPETIZIONE_' + flag.replace(' ', '_')] != 'None':
+                HUE_CONNECTION['colors']['ACC'][flag.replace(' ', '_')] = values[
+                    'INPUT_COLOR_ASSETTO_CORSA_COMPETIZIONE_' + flag.replace(' ', '_')]
+                window['CANVAS_ASSETTO_CORSA_COMPETIZIONE_' + flag.replace(' ', '_')].update(
+                    background_color=values['INPUT_COLOR_ASSETTO_CORSA_COMPETIZIONE_' + flag.replace(' ', '_')])
                 save_hue_connection_to_file()
+
+        # iRacing Settings
 
         for flag in iracing_flags:
             if event == 'BTN_TEST_IRACING_' + flag.replace(' ', '_'):
@@ -412,14 +449,13 @@ def open_window():
                 window['CANVAS_IRACING_' + flag.replace(' ', '_')].update(
                     background_color='#000000')
                 save_hue_connection_to_file()
-            if event == 'INPUT_COLOR_IRACING_' + flag.replace(' ', '_'):
-                HUE_CONNECTION['colors']['iRacing'][flag.replace(' ', '_')] = values['INPUT_COLOR_IRACING_' + flag.replace(' ', '_')]
-                window['CANVAS_IRACING_' + flag.replace(' ', '_')].update(background_color=values['INPUT_COLOR_IRACING_' + flag.replace(' ', '_')])
+            if event == 'INPUT_COLOR_IRACING_' + flag.replace(' ', '_') and values[
+                'INPUT_COLOR_IRACING_' + flag.replace(' ', '_')] != 'None':
+                HUE_CONNECTION['colors']['iRacing'][flag.replace(' ', '_')] = values[
+                    'INPUT_COLOR_IRACING_' + flag.replace(' ', '_')]
+                window['CANVAS_IRACING_' + flag.replace(' ', '_')].update(
+                    background_color=values['INPUT_COLOR_IRACING_' + flag.replace(' ', '_')])
                 save_hue_connection_to_file()
-
-        if event == 'CHECKBOX_AUTO_SYNC':
-            HUE_CONNECTION['auto_sync'] = values['CHECKBOX_AUTO_SYNC']
-            save_hue_connection_to_file()
 
         if event == sg.WINDOW_CLOSED:
             stop_sync()
@@ -430,12 +466,14 @@ def open_window():
 def enable_interface(bridge: Bridge, window: sg.Window):
     window['MSG_BRIDGE'].update('Connection established.')
     window['MENU_LIGHT'].update(disabled=False)
-
     window['BTN_SYNC_START'].update(disabled=False)
     window['BTN_SYNC_STOP'].update(disabled=False)
     window['SIM_SELECT_AC'].update(disabled=False)
     window['SIM_SELECT_ACC'].update(disabled=False)
     window['SIM_SELECT_IRACING'].update(disabled=False)
+    window['TAB_SETTINGS_ASSETTO_CORSA'].update(disabled=False)
+    window['TAB_SETTINGS_ASSETTO_CORSA_COMPETIZIONE'].update(disabled=False)
+    window['TAB_SETTINGS_IRACING'].update(disabled=False)
     window['MENU_LIGHT'].update(values=get_lights_from_bridge(bridge))
     window['MSG_30_SECONDS'].update(visible=False)
 
@@ -443,12 +481,14 @@ def enable_interface(bridge: Bridge, window: sg.Window):
 def disable_interface(window: sg.Window):
     window['MSG_BRIDGE'].update('Connection failed.')
     window['MENU_LIGHT'].update(disabled=True)
-
     window['BTN_SYNC_START'].update(disabled=True)
     window['BTN_SYNC_STOP'].update(disabled=True)
     window['SIM_SELECT_AC'].update(disabled=True)
     window['SIM_SELECT_ACC'].update(disabled=True)
     window['SIM_SELECT_IRACING'].update(disabled=True)
+    window['TAB_SETTINGS_ASSETTO_CORSA'].update(disabled=True)
+    window['TAB_SETTINGS_ASSETTO_CORSA_COMPETIZIONE'].update(disabled=True)
+    window['TAB_SETTINGS_IRACING'].update(disabled=True)
     window['MENU_LIGHT'].update(values=[])
     window['MSG_30_SECONDS'].update(visible=True)
 
@@ -633,17 +673,35 @@ def stop_sync():
 
 
 def raise_color(color_hex: str, bridge: Bridge, window: sg.Window):
-    if color_hex == '':
-        for light in HUE_CONNECTION['lights']:
-            bridge.set_light(light, {'transitiontime': 0, 'on': False})
-        window['CANVAS_FLAG'].update(background_color='#000000')
+    if len(HUE_CONNECTION['lights']) == 0:
+        show_error_window('No lights selected. Select lights under Settings -> General - Lights -> Lights to use')
     else:
-        converter = Converter()
-        color_xy = converter.hex_to_xy(color_hex.replace('#', ''))
-        for light in HUE_CONNECTION['lights']:
-            bridge.set_light(light, {'transitiontime': 0, 'on': True, 'bri': int(HUE_CONNECTION['brightness']),
-                                     'xy': color_xy})
-        window['CANVAS_FLAG'].update(background_color=color_hex)
+        if color_hex == '':
+            for light in HUE_CONNECTION['lights']:
+                bridge.set_light(light, {'transitiontime': 0, 'on': False})
+            window['CANVAS_FLAG'].update(background_color='#000000')
+        else:
+            converter = Converter()
+            color_xy = converter.hex_to_xy(color_hex.replace('#', ''))
+            for light in HUE_CONNECTION['lights']:
+                bridge.set_light(light, {'transitiontime': 0, 'on': True, 'bri': int(HUE_CONNECTION['brightness']),
+                                         'xy': color_xy})
+            window['CANVAS_FLAG'].update(background_color=color_hex)
+
+
+def show_error_window(error: str):
+    layout = [
+        [sg.Text(error, font=('Helvetica', 12), text_color='red')]
+    ]
+
+    window = sg.Window('Error', layout, icon=images, font='Helvetica', finalize=True)
+
+    while True:
+        event, values = window.read()
+
+        if event == sg.WINDOW_CLOSED:
+            window.close()
+            break
 
 
 if __name__ == "__main__":
