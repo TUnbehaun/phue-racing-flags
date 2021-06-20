@@ -1,7 +1,14 @@
+# IDE
 .idea/*
-sf.json
-phue-rf-save.json
+
+# venv
+venv
+
+# cached files
 __pycache__/*
 external/__pycache__/*
 external/modified/__pycache__/*
 sims/__pycache__/*
+
+# project-specific files
+phue-rf-save.json

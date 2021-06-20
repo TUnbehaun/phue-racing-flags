@@ -57,9 +57,10 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-![grafik](https://user-images.githubusercontent.com/12392728/121082761-dd09b480-c7de-11eb-9910-a92b2ad0bb71.png)
+<img src="https://user-images.githubusercontent.com/12392728/122672511-1cb3a180-d1cc-11eb-86a0-a48581a5f507.PNG" alt="Main Screen" width="600" height="auto">
+<img src="https://user-images.githubusercontent.com/12392728/122672513-1f15fb80-d1cc-11eb-962d-f92a2a063c72.PNG" alt="Settings Screen" width="600" height="auto">
 
-One Friday evening I thought to myself that it would be pretty sweet to use my Philips Hue lights as indicators for the racing flags inside of Assetto Corsa Competizione. As no app was available to achieve this, I decided to take matters into my own hand and create one.
+One Friday evening I thought to myself that it would be pretty sweet to use my Philips Hue lights as indicators for the racing flags inside of Assetto Corsa Competizione. As no app was available to achieve this, I decided to take matters into my own hands and create one.
 
 ### Built With
 
@@ -105,16 +106,18 @@ To just use the app itself without setting up a local development copy, you can 
 
 Once the app is started, you can use it the following way:
 
-1. Enter the IP Address of your Philips Hue Bridge in the "bridge ip" input field.
+1. Enter the IP Address of your Philips Hue Bridge under Settings -> General -> Bridge IP.
 (You can find the IP Address of your Bridge in the interface of your Router)
 2. Press the (hardware) link button on your Philips Hue Bridge and then within 30 seconds hit the "Connect" button in the app.
 (Pressing the (hardware) link button on your Philips Hue Bridge is only necessary for the very first time you connect the app to a new Bridge)
-3. You should be able to choose one or multiple of your lights under "flag light" to use as the Racing Flag Light(s)
-4. Use the radio buttons under "sim" to switch between Assetto Corsa Competizione or iRacing.
-5. Test the Racing Flag Light(s) by using the buttons under "color test".
-6. Adjust brightness if needed.
-7. To start syncing the Racing Flag Light(s) with your simulator's race flag click "Start" under "live sync".
-8. To stop syncing the Racing Flag Light(s) click "Stop" under "live sync".
+3. You should be able to choose one or multiple of your lights under Settings -> General -> Lights to use as the Racing Flag Light(s)
+4. Adjust brightness if needed.
+5. Use the live sync setting to enable live sync on app startup.
+6. Custom colors for your lights can be set under Settings -> Assetto Corsa / Assetto Corsa Competizione / iRacing respectively.
+7. Test your color configuration by using the Test buttons next to each flag.
+8. On the main view you can use the radio buttons under "sim" to switch between Assetto Corsa, Assetto Corsa Competizione or iRacing.
+9. To start syncing the Racing Flag Light(s) with your simulator's race flag click "Start" under "live sync".
+10. To stop syncing the Racing Flag Light(s) click "Stop" under "live sync".
 
 <!-- ROADMAP -->
 ## Roadmap
@@ -151,6 +154,7 @@ Project Link: [https://github.com/TUnbehaun/phue-racing-flags](https://github.co
 * [PySimpleGui](https://github.com/PySimpleGUI/PySimpleGUI)
 * [PyInstaller](http://www.pyinstaller.org/)
 * [pyirsdk](https://github.com/kutu/pyirsdk)
+* [hue-python-rgb-converter](https://github.com/benknight/hue-python-rgb-converter)
 
 ## Disclaimer
 
