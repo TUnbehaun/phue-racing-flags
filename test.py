@@ -1,12 +1,6 @@
 import eel
 
 
-eel.init('web')
-
-
-@eel.expose
-def test_python_function():
-    eel.test_js_function()
-
-
-eel.start('index.html', mode='edge')
+if __name__ == '__main__':
+    eel.init('web')
+    eel.start('index.html', mode='default', size=(1024, 768), position=(0, 0))
