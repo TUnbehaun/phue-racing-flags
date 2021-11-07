@@ -10,17 +10,18 @@
     <link rel="stylesheet" href="vendor/bulma/bulma-extensions.min.css">
     <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
     <script type="application/javascript" src="vendor/vue/vue.global.js"></script>
+    <script type="application/javascript" src="vendor/vue/vuex.global.js"></script>
     <script type="application/javascript" src="vendor/vue/vue-router.global.js"></script>
     <script type="application/javascript" src="vendor/bulma/bulma-extensions.min.js"></script>
     <script type="application/javascript" src="eel.js"></script>
   </head>
   <body>
     <div id="app">
-      <app-navigation-wrapper></app-navigation-wrapper>
+      <app-navigation-component></app-navigation-component>
       <div class="container">
         <router-view></router-view>
       </div>
     </div>
   </body>
-  <script type="application/javascript" src="app.js"></script>
+  <script type="module" src="app.js"></script>
 </html>
