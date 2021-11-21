@@ -15,9 +15,6 @@ const app = Vue.createApp({
 
 const routes = [
     { path: '/', component: MainComponent },
-    { path: '/assetto-corsa', component: MainComponent },
-    { path: '/assetto-corsa-competizione', component: MainComponent },
-    { path: '/iracing', component: MainComponent },
     { path: '/settings', component: SettingsComponent }
 ];
 

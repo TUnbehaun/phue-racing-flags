@@ -1,6 +1,7 @@
 import eel
 import json
 from external.phue import Bridge
+from external.modified.rgbxy import Converter
 
 # Hue Colors
 HUE_COLOR_NO_FLAG = None
@@ -31,37 +32,15 @@ HUE_CONNECTION = {
     'brightness': 255,
     'sim': 'AC',
     'colors': {
-        'AC': {
-            'No_Flag': '',
-            'Blue_Flag': GUI_COLOR_BLUE_FLAG,
-            'Yellow_Flag': GUI_COLOR_YELLOW_FLAG,
-            'Black_Flag': '',
-            'White_Flag': GUI_COLOR_WHITE_FLAG,
-            'Checkered_Flag': '',
-            'Penalty_Flag': GUI_COLOR_PENALTY_FLAG
-        },
-        'ACC': {
-            'No_Flag': '',
-            'Blue_Flag': GUI_COLOR_BLUE_FLAG,
-            'Yellow_Flag': GUI_COLOR_YELLOW_FLAG,
-            'Black_Flag': '',
-            'White_Flag': GUI_COLOR_WHITE_FLAG,
-            'Checkered_Flag': '',
-            'Penalty_Flag': GUI_COLOR_PENALTY_FLAG,
-            'Green_Flag': GUI_COLOR_GREEN_FLAG,
-            'Orange_Flag': GUI_COLOR_ORANGE_FLAG
-        },
-        'iRacing': {
-            'No_Flag': '',
-            'Blue_Flag': GUI_COLOR_BLUE_FLAG,
-            'Yellow_Flag': GUI_COLOR_YELLOW_FLAG,
-            'Black_Flag': '',
-            'White_Flag': GUI_COLOR_WHITE_FLAG,
-            'Checkered_Flag': '',
-            'Red_Flag': GUI_COLOR_PENALTY_FLAG,
-            'Green_Flag': GUI_COLOR_GREEN_FLAG,
-            'Meatball_Flag': GUI_COLOR_ORANGE_FLAG
-        }
+        'No_Flag': '',
+        'Blue_Flag': GUI_COLOR_BLUE_FLAG,
+        'Yellow_Flag': GUI_COLOR_YELLOW_FLAG,
+        'Black_Flag': '',
+        'White_Flag': GUI_COLOR_WHITE_FLAG,
+        'Checkered_Flag': '',
+        'Penalty_Flag': GUI_COLOR_PENALTY_FLAG,
+        'Green_Flag': GUI_COLOR_GREEN_FLAG,
+        'Orange_Flag': GUI_COLOR_ORANGE_FLAG
     },
     'auto_sync': False
 }
@@ -73,6 +52,39 @@ def init_bridge_connection():
     eel.mutate_connection_works(bridge_connection_works())
     eel.mutate_hue_connection(HUE_CONNECTION)
     eel.mutate_available_lights(get_lights_from_bridge(Bridge(HUE_CONNECTION['ip'])))
+
+
+@eel.expose
+def connect(ip: str):
+    HUE_CONNECTION['ip'] = ip
+    save_hue_connection_to_file()
+    init_bridge_connection()
+
+
+@eel.expose
+def sync_and_save_hue_connection(hueConnection):
+    global HUE_CONNECTION
+    HUE_CONNECTION = hueConnection
+    save_hue_connection_to_file()
+
+
+@eel.expose
+def test_light(key: str):
+    color_hex = HUE_CONNECTION['colors'][key]
+    if color_hex == '' or color_hex == '#000000':
+        for light in HUE_CONNECTION['lights']:
+            Bridge(HUE_CONNECTION['ip']).set_light(light, {'transitiontime': 0, 'on': False})
+    else:
+        converter = Converter()
+        color_xy = converter.hex_to_xy(color_hex.replace('#', ''))
+        for light in HUE_CONNECTION['lights']:
+            Bridge(HUE_CONNECTION['ip']).set_light(light, {'transitiontime': 0, 'on': True, 'bri': int(HUE_CONNECTION['brightness']),
+                                     'xy': color_xy})
+
+
+def save_hue_connection_to_file():
+    save_file = open(SAVE_FILE_PATH, 'w')
+    json.dump(HUE_CONNECTION, save_file)
 
 
 def load_hue_connection_from_file():
@@ -88,43 +100,21 @@ def load_hue_connection_from_file():
     except (FileNotFoundError, KeyError) as error:
         print(error)
         HUE_CONNECTION['ip'] = ''
-        HUE_CONNECTION['lights'] = ''
+        HUE_CONNECTION['lights'] = []
         HUE_CONNECTION['brightness'] = 255
         HUE_CONNECTION['sim'] = 'AC'
         HUE_CONNECTION['colors'] = {
-            'AC': {
-                'No_Flag': '',
-                'Blue_Flag': GUI_COLOR_BLUE_FLAG,
-                'Yellow_Flag': GUI_COLOR_YELLOW_FLAG,
-                'Black_Flag': '',
-                'White_Flag': GUI_COLOR_WHITE_FLAG,
-                'Checkered_Flag': '',
-                'Penalty_Flag': GUI_COLOR_PENALTY_FLAG
-            },
-            'ACC': {
-                'No_Flag': '',
-                'Blue_Flag': GUI_COLOR_BLUE_FLAG,
-                'Yellow_Flag': GUI_COLOR_YELLOW_FLAG,
-                'Black_Flag': '',
-                'White_Flag': GUI_COLOR_WHITE_FLAG,
-                'Checkered_Flag': '',
-                'Penalty_Flag': GUI_COLOR_PENALTY_FLAG,
-                'Green_Flag': GUI_COLOR_GREEN_FLAG,
-                'Orange_Flag': GUI_COLOR_ORANGE_FLAG
-            },
-            'iRacing': {
-                'No_Flag': '',
-                'Blue_Flag': GUI_COLOR_BLUE_FLAG,
-                'Yellow_Flag': GUI_COLOR_YELLOW_FLAG,
-                'Black_Flag': '',
-                'White_Flag': GUI_COLOR_WHITE_FLAG,
-                'Checkered_Flag': '',
-                'Red_Flag': GUI_COLOR_PENALTY_FLAG,
-                'Green_Flag': GUI_COLOR_GREEN_FLAG,
-                'Meatball_Flag': GUI_COLOR_ORANGE_FLAG
-            },
-            'auto_sync': False
+            'No_Flag': '',
+            'Blue_Flag': GUI_COLOR_BLUE_FLAG,
+            'Yellow_Flag': GUI_COLOR_YELLOW_FLAG,
+            'Black_Flag': '',
+            'White_Flag': GUI_COLOR_WHITE_FLAG,
+            'Checkered_Flag': '',
+            'Penalty_Flag': GUI_COLOR_PENALTY_FLAG,
+            'Green_Flag': GUI_COLOR_GREEN_FLAG,
+            'Orange_Flag': GUI_COLOR_ORANGE_FLAG
         }
+        HUE_CONNECTION['auto_sync'] = False
 
 
 def bridge_connection_works() -> bool:

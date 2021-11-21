@@ -1,6 +1,6 @@
 export default {
     template: `
-        <section class="hero is-danger">
+        <section v-if="!connectionWorks" class="hero is-danger">
           <div class="hero-body">
             <p class="title">
               No Connection!
@@ -10,5 +10,12 @@ export default {
             </p>
           </div>
         </section>
-    `
+    `,
+    computed: {
+        connectionWorks: {
+            get() {
+                return this.$store.state.connectionWorks;
+            }
+        }
+    }
 }

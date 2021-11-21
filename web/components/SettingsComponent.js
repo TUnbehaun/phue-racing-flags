@@ -10,7 +10,7 @@ export default {
                   <p class="help">You can find the IP address of your Philips Hue bridge in the interface of your router.</p>
                 </div>
                 <div class="control">
-                  <a class="button is-primary">
+                  <a v-on:click="connect(bridgeIp)" class="button is-primary">
                     <span class="icon is-small">
                       <i class="fas fa-link"></i>
                     </span>
@@ -49,6 +49,36 @@ export default {
             
             
             <section class="section">
+                <h1 class="title">Flags</h1>
+                <label class="label">Flag Colors</label>
+                <table class="table is-fullwidth is-striped">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Color</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(flag, index) in Object.keys(flags)">
+                            <td>{{ flag.replace('_', ' ') }}</td>
+                            <td>
+                                <input type="color" v-model="Object.values(flags)[index]" v-on:change="changeColor(Object.keys(flags)[index], $event.target.value)">
+                            </td>
+                            <td>
+                                <span>&nbsp;</span>
+                                <button v-on:click="testLight(Object.keys(flags)[index])" class="button">
+                                    <span class="icon is-small"><i class="fas fa-lightbulb"></i></span><span>Test</span>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p class="help">You can set the color to black if you don't want your setup to light up for a certain flag.</p>
+            </section>
+            
+            
+            <section class="section">
               <h1 class="title">Startup</h1>
               <label class="label">Live Sync</label>
               <label class="checkbox">
@@ -70,6 +100,7 @@ export default {
             },
             set(value) {
                 this.$store.commit('setBridgeIp', value);
+                eel.sync_and_save_hue_connection(this.$store.state.hueConnection);
             }
         },
         availableLights: {
@@ -83,6 +114,7 @@ export default {
             },
             set(value) {
                 this.$store.commit('setSelectedLights', value);
+                eel.sync_and_save_hue_connection(this.$store.state.hueConnection);
             }
         },
         brightness: {
@@ -91,6 +123,7 @@ export default {
             },
             set(value) {
                 this.$store.commit('setBrightness', value);
+                eel.sync_and_save_hue_connection(this.$store.state.hueConnection);
             }
         },
         syncOnStartup: {
@@ -99,12 +132,25 @@ export default {
             },
             set(value) {
                 this.$store.commit('setAutoSync', value);
+                eel.sync_and_save_hue_connection(this.$store.state.hueConnection);
+            }
+        },
+        flags: {
+            get() {
+                return this.$store.state.hueConnection.colors;
             }
         }
     },
     methods: {
-        test: function() {
-            console.log(this.bridgeIp);
+        connect: function () {
+            eel.connect(this.bridgeIp);
+        },
+        changeColor: function (key, value) {
+            this.$store.commit('setColor', { key, value });
+            eel.sync_and_save_hue_connection(this.$store.state.hueConnection);
+        },
+        testLight: function (key) {
+            eel.test_light(key);
         }
     }
 }

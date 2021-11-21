@@ -7,37 +7,15 @@ const store = Vuex.createStore({
                 brightness: 255,
                 'sim': 'AC',
                 'colors': {
-                    'AC': {
-                        'No_Flag': '',
-                        'Blue_Flag': '#0D47A1',
-                        'Yellow_Flag': '#FFEB3B',
-                        'Black_Flag': '',
-                        'White_Flag': '#ffffff',
-                        'Checkered_Flag': '',
-                        'Penalty_Flag': '#b71c1c'
-                    },
-                    'ACC': {
-                        'No_Flag': '',
-                        'Blue_Flag': '#0D47A1',
-                        'Yellow_Flag': '#FFEB3B',
-                        'Black_Flag': '',
-                        'White_Flag': '#FFEB3B',
-                        'Checkered_Flag': '',
-                        'Penalty_Flag': '#b71c1c',
-                        'Green_Flag': '#388E3C',
-                        'Orange_Flag': '#FF6F00'
-                    },
-                    'iRacing': {
-                        'No_Flag': '',
-                        'Blue_Flag': '#0D47A1',
-                        'Yellow_Flag': '#FFEB3B',
-                        'Black_Flag': '',
-                        'White_Flag': '#FFEB3B',
-                        'Checkered_Flag': '',
-                        'Red_Flag': '#b71c1c',
-                        'Green_Flag': '#388E3C',
-                        'Meatball_Flag': '#FF6F00'
-                    }
+                    'No_Flag': '',
+                    'Blue_Flag': '#0D47A1',
+                    'Yellow_Flag': '#FFEB3B',
+                    'Black_Flag': '',
+                    'White_Flag': '#FFEB3B',
+                    'Checkered_Flag': '',
+                    'Penalty_Flag': '#b71c1c',
+                    'Green_Flag': '#388E3C',
+                    'Orange_Flag': '#FF6F00'
                 },
                 'auto_sync': false
             },
@@ -51,7 +29,7 @@ const store = Vuex.createStore({
             console.log(state.hueConnection);
         },
         setBridgeIp(state, bridgeIp) {
-            state.hueConnection.bridgeIp = bridgeIp;
+            state.hueConnection.ip = bridgeIp;
         },
         setSelectedLights(state, selectedLights) {
             state.hueConnection.lights = selectedLights;
@@ -67,6 +45,9 @@ const store = Vuex.createStore({
         },
         setAvailableLights(state, availableLights) {
             state.availableLights = availableLights;
+        },
+        setColor(state, { key, value }) {
+            state.hueConnection.colors[key] = value;
         }
     }
 });
