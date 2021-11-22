@@ -19,7 +19,7 @@ export default {
                             <div class="content is-large">Live Sync Status: <strong>Running</strong></div>      
                         </div>
                         <div class="column">
-                            <button class="button is-medium" style="float: right;"><span class="icon is-medium"><i class="fas fa-stop"></i></span><span>Stop</span></button>
+                            <button v-on:click="stopLiveSync" class="button is-medium" style="float: right;"><span class="icon is-medium"><i class="fas fa-stop"></i></span><span>Stop</span></button>
                         </div>
                     </div>
                   </div>
@@ -29,7 +29,7 @@ export default {
                             <div class="content is-large">Live Sync Status: <strong>Stopped</strong></div>
                         </div>
                         <div class="column">
-                            <button class="button is-medium" style="float: right;"><span class="icon is-medium"><i class="fas fa-play"></i></span><span>Start</span></button>
+                            <button v-on:click="startLiveSync" class="button is-medium" style="float: right;"><span class="icon is-medium"><i class="fas fa-play"></i></span><span>Start</span></button>
                         </div>
                     </div>
                   </div>
@@ -101,8 +101,17 @@ export default {
     },
     methods: {
         selectSim: function (sim) {
+            this.stopLiveSync();
             this.$store.commit('setSelectedSim', sim);
             eel.sync_and_save_hue_connection(this.$store.state.hueConnection);
+        },
+        startLiveSync: function () {
+            this.$store.commit('setLiveSyncRunning', true);
+            eel.start_sync();
+        },
+        stopLiveSync: function () {
+            this.$store.commit('setLiveSyncRunning', false);
+            eel.stop_sync();
         }
     }
 }

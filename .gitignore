@@ -12,3 +12,10 @@ sims/__pycache__/*
 
 # project-specific files
 phue-rf-save.json
+
+# build files
+build
+dist
+phue-racing-flags.spec
+eel.spec
+web.spec

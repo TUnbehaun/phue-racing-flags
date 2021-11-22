@@ -1,18 +1,12 @@
 import eel
 import json
+import time
+import sims.acc as acc
+import sims.iracing as iracing
+import sims.ac as ac
 from external.phue import Bridge
 from external.modified.rgbxy import Converter
 
-# Hue Colors
-HUE_COLOR_NO_FLAG = None
-HUE_COLOR_BLUE_FLAG = [0.1532, 0.0475]
-HUE_COLOR_YELLOW_FLAG = [0.4787, 0.4681]
-HUE_COLOR_BLACK_FLAG = None
-HUE_COLOR_WHITE_FLAG = [0.3089, 0.3269]
-HUE_COLOR_CHECKERED_FLAG = None
-HUE_COLOR_PENALTY_FLAG = [0.6897, 0.3074]
-HUE_COLOR_GREEN_FLAG = [0.17, 0.7]
-HUE_COLOR_ORANGE_FLAG = [0.633, 0.3522]
 
 # GUI Theme Customization
 GUI_COLOR_NO_FLAG = '#000000'
@@ -44,6 +38,7 @@ HUE_CONNECTION = {
     },
     'auto_sync': False
 }
+STOP_SYNC = True
 
 
 @eel.expose
@@ -71,15 +66,35 @@ def sync_and_save_hue_connection(hueConnection):
 @eel.expose
 def test_light(key: str):
     color_hex = HUE_CONNECTION['colors'][key]
-    if color_hex == '' or color_hex == '#000000':
-        for light in HUE_CONNECTION['lights']:
-            Bridge(HUE_CONNECTION['ip']).set_light(light, {'transitiontime': 0, 'on': False})
-    else:
-        converter = Converter()
-        color_xy = converter.hex_to_xy(color_hex.replace('#', ''))
-        for light in HUE_CONNECTION['lights']:
-            Bridge(HUE_CONNECTION['ip']).set_light(light, {'transitiontime': 0, 'on': True, 'bri': int(HUE_CONNECTION['brightness']),
-                                     'xy': color_xy})
+    raise_color(color_hex)
+
+
+@eel.expose
+def start_sync():
+    global STOP_SYNC
+    if STOP_SYNC:
+        STOP_SYNC = False
+        while True:
+            if HUE_CONNECTION['sim'] == 'AC':
+                sync_ac_color()
+                time.sleep(0.1)
+
+            if HUE_CONNECTION['sim'] == 'ACC':
+                sync_acc_color()
+                time.sleep(0.1)
+
+            if HUE_CONNECTION['sim'] == 'iRacing':
+                sync_iracing_color()
+                time.sleep(0.1)
+
+            if STOP_SYNC:
+                break
+
+
+@eel.expose
+def stop_sync():
+    global STOP_SYNC
+    STOP_SYNC = True
 
 
 def save_hue_connection_to_file():
@@ -135,6 +150,98 @@ def get_lights_from_bridge(bridge: Bridge) -> []:
     return light_options
 
 
+def raise_color(color_hex: str):
+    if color_hex == '' or color_hex == '#000000':
+        for light in HUE_CONNECTION['lights']:
+            Bridge(HUE_CONNECTION['ip']).set_light(light, {'transitiontime': 0, 'on': False})
+    else:
+        converter = Converter()
+        color_xy = converter.hex_to_xy(color_hex.replace('#', ''))
+        for light in HUE_CONNECTION['lights']:
+            Bridge(HUE_CONNECTION['ip']).set_light(light, {'transitiontime': 0, 'on': True, 'bri': int(HUE_CONNECTION['brightness']),
+                                                           'xy': color_xy})
+
+
+def raise_ac_flag(flag: ac.ACFlagType):
+    if flag == ac.ACFlagType.AC_NO_FLAG:
+        raise_color(HUE_CONNECTION['colors']['No_Flag'])
+    if flag == ac.ACFlagType.AC_BLUE_FLAG:
+        raise_color(HUE_CONNECTION['colors']['Blue_Flag'])
+    if flag == ac.ACFlagType.AC_YELLOW_FLAG:
+        raise_color(HUE_CONNECTION['colors']['Yellow_Flag'])
+    if flag == ac.ACFlagType.AC_BLACK_FLAG:
+        raise_color(HUE_CONNECTION['colors']['Black_Flag'])
+    if flag == ac.ACFlagType.AC_WHITE_FLAG:
+        raise_color(HUE_CONNECTION['colors']['White_Flag'])
+    if flag == ac.ACFlagType.AC_CHECKERED_FLAG:
+        raise_color(HUE_CONNECTION['colors']['Checkered_Flag'])
+    if flag == ac.ACFlagType.AC_PENALTY_FLAG:
+        raise_color(HUE_CONNECTION['colors']['Penalty_Flag'])
+
+
+def raise_acc_flag(flag: acc.ACCFlagType):
+    if flag == acc.ACCFlagType.ACC_NO_FLAG:
+        raise_color(HUE_CONNECTION['colors']['No_Flag'])
+    if flag == acc.ACCFlagType.ACC_BLUE_FLAG:
+        raise_color(HUE_CONNECTION['colors']['Blue_Flag'])
+    if flag == acc.ACCFlagType.ACC_YELLOW_FLAG:
+        raise_color(HUE_CONNECTION['colors']['Yellow_Flag'])
+    if flag == acc.ACCFlagType.ACC_BLACK_FLAG:
+        raise_color(HUE_CONNECTION['colors']['Black_Flag'])
+    if flag == acc.ACCFlagType.ACC_WHITE_FLAG:
+        raise_color(HUE_CONNECTION['colors']['White_Flag'])
+    if flag == acc.ACCFlagType.ACC_CHECKERED_FLAG:
+        raise_color(HUE_CONNECTION['colors']['Checkered_Flag'])
+    if flag == acc.ACCFlagType.ACC_PENALTY_FLAG:
+        raise_color(HUE_CONNECTION['colors']['Penalty_Flag'])
+    if flag == acc.ACCFlagType.ACC_GREEN_FLAG:
+        raise_color(HUE_CONNECTION['colors']['Green_Flag'])
+    if flag == acc.ACCFlagType.ACC_ORANGE_FLAG:
+        raise_color(HUE_CONNECTION['colors']['Orange_Flag'])
+
+
+def raise_iracing_flag(flag: iracing.IRacingGUIFlagType):
+    if flag == iracing.IRacingGUIFlagType.IRACING_NO_FLAG:
+        raise_color(HUE_CONNECTION['colors']['No_Flag'])
+    if flag == iracing.IRacingGUIFlagType.IRACING_BLUE_FLAG:
+        raise_color(HUE_CONNECTION['colors']['Blue_Flag'])
+    if flag == iracing.IRacingGUIFlagType.IRACING_YELLOW_FLAG:
+        raise_color(HUE_CONNECTION['colors']['Yellow_Flag'])
+    if flag == iracing.IRacingGUIFlagType.IRACING_BLACK_FLAG:
+        raise_color(HUE_CONNECTION['colors']['Black_Flag'])
+    if flag == iracing.IRacingGUIFlagType.IRACING_WHITE_FLAG:
+        raise_color(HUE_CONNECTION['colors']['White_Flag'])
+    if flag == iracing.IRacingGUIFlagType.IRACING_CHEQUERED_FLAG:
+        raise_color(HUE_CONNECTION['colors']['Checkered_Flag'])
+    if flag == iracing.IRacingGUIFlagType.IRACING_RED_FLAG:
+        raise_color(HUE_CONNECTION['colors']['Penalty_Flag'])
+    if flag == iracing.IRacingGUIFlagType.IRACING_GREEN_FLAG:
+        raise_color(HUE_CONNECTION['colors']['Green_Flag'])
+    if flag == iracing.IRacingGUIFlagType.IRACING_MEATBALL_FLAG:
+        raise_color(HUE_CONNECTION['colors']['Orange_Flag'])
+
+
+def sync_ac_color():
+    flag = ac.get_flag()
+    raise_ac_flag(flag)
+
+
+def sync_acc_color():
+    flag = acc.get_flag()
+    raise_acc_flag(flag)
+
+
+def sync_iracing_color():
+    flag = iracing.get_flag()
+    raise_iracing_flag(flag)
+
+
+def close_callback(route, websockets):
+    if not websockets:
+        stop_sync()
+        exit()
+
+
 if __name__ == '__main__':
     eel.init('web')
-    eel.start('index.html', mode='default', size=(1024, 768), position=(0, 0))
+    eel.start('index.html', mode='default', size=(1024, 768))
