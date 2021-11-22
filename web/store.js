@@ -20,13 +20,13 @@ const store = Vuex.createStore({
                 'auto_sync': false
             },
             connectionWorks: false,
-            availableLights: []
+            availableLights: [],
+            liveSyncRunning: false
         }
     },
     mutations: {
         setHueConnection(state, hueConnection) {
             state.hueConnection = hueConnection;
-            console.log(state.hueConnection);
         },
         setBridgeIp(state, bridgeIp) {
             state.hueConnection.ip = bridgeIp;
@@ -48,6 +48,12 @@ const store = Vuex.createStore({
         },
         setColor(state, { key, value }) {
             state.hueConnection.colors[key] = value;
+        },
+        setLiveSyncRunning(state, isRunning) {
+            state.liveSyncRunning = isRunning;
+        },
+        setSelectedSim(state, sim) {
+            state.hueConnection.sim = sim;
         }
     }
 });

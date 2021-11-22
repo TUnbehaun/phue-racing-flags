@@ -18,7 +18,7 @@ export default {
                   </a>
                 </div>
               </div>
-              <div class="notification is-warning">
+              <div v-if="!connectionWorks" class="notification is-warning">
                 If you are connecting this app to your bridge for the first time, you have to press the pairing button on your
                 bridge and then connect within 30 seconds.
               </div>
@@ -63,7 +63,7 @@ export default {
                         <tr v-for="(flag, index) in Object.keys(flags)">
                             <td>{{ flag.replace('_', ' ') }}</td>
                             <td>
-                                <input type="color" v-model="Object.values(flags)[index]" v-on:change="changeColor(Object.keys(flags)[index], $event.target.value)">
+                                <input type="color" v-model="Object.values(flags)[index]" v-on:change="changeColor(Object.keys(flags)[index], $event.target.value)" class="is-clickable">
                             </td>
                             <td>
                                 <span>&nbsp;</span>
