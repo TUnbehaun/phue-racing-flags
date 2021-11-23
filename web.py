@@ -1,7 +1,5 @@
 import eel
 import json
-import time
-import threading
 import sims.acc as acc
 import sims.iracing as iracing
 import sims.ac as ac
@@ -72,29 +70,25 @@ def test_light(key: str):
 
 @eel.expose
 def start_sync():
-    thread = threading.Thread(target=start_sync_thread)
-    thread.start()
-
-
-def start_sync_thread():
     global STOP_SYNC
     if STOP_SYNC:
         STOP_SYNC = False
         while True:
             if HUE_CONNECTION['sim'] == 'AC':
                 sync_ac_color()
-                time.sleep(0.1)
+                eel.sleep(0.1)
 
             if HUE_CONNECTION['sim'] == 'ACC':
                 sync_acc_color()
-                time.sleep(0.1)
+                eel.sleep(0.1)
 
             if HUE_CONNECTION['sim'] == 'iRacing':
                 sync_iracing_color()
-                time.sleep(0.1)
+                eel.sleep(0.1)
 
             if STOP_SYNC:
                 break
+
 
 @eel.expose
 def stop_sync():

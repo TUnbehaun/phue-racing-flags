@@ -19,8 +19,10 @@ jobs:
         run: pip install pyinstaller
       - name: Check PyInstaller Version
         run: pyinstaller --version
+      - name: Install Eel
+        run: pip install eel
       - name: Create .exe File
-        run: pyinstaller --noconsole --onefile --name "phue-racing-flags" --add-data "images/icon.ico;images" gui.py
+        run: python -m eel web.py web --onefile --noconsole --name "phue-racing-flags" --add-data "images/icon.ico;images"
       - name: Bump Version and Push Tag
         id: tag_version
         uses: mathieudutour/github-tag-action@v5.5
