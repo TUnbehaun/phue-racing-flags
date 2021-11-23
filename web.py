@@ -243,4 +243,5 @@ def close_callback(route, websockets):
 
 if __name__ == '__main__':
     eel.init('web')
-    eel.start('index.html', mode='default', size=(1600, 900))
+    eel.browsers.set_path('electron', 'node_modules/electron/dist/electron')
+    eel.start('index.html', mode='electron')
