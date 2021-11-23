@@ -8,8 +8,16 @@ const app = Vue.createApp({
     components: {
         'app-navigation-component': NavigationComponent,
     },
+    created() {
+        window.addEventListener('beforeunload', this.exitingApp)
+    },
     mounted() {
         eel.init_bridge_connection();
+    },
+    methods: {
+        exitingApp: function () {
+            eel.stop_sync();
+        }
     }
 });
 

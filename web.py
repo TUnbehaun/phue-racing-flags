@@ -1,6 +1,7 @@
 import eel
 import json
 import time
+import threading
 import sims.acc as acc
 import sims.iracing as iracing
 import sims.ac as ac
@@ -71,6 +72,11 @@ def test_light(key: str):
 
 @eel.expose
 def start_sync():
+    thread = threading.Thread(target=start_sync_thread)
+    thread.start()
+
+
+def start_sync_thread():
     global STOP_SYNC
     if STOP_SYNC:
         STOP_SYNC = False
@@ -89,7 +95,6 @@ def start_sync():
 
             if STOP_SYNC:
                 break
-
 
 @eel.expose
 def stop_sync():
@@ -244,4 +249,4 @@ def close_callback(route, websockets):
 
 if __name__ == '__main__':
     eel.init('web')
-    eel.start('index.html', mode='default', size=(1024, 768))
+    eel.start('index.html', mode='default', size=(1600, 900))
