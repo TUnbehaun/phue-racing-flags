@@ -1,4 +1,6 @@
 import eel
+import os
+import sys
 import json
 import sims.acc as acc
 import sims.iracing as iracing
@@ -241,7 +243,16 @@ def close_callback(route, websockets):
         exit()
 
 
+def resource_path(rel_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+    return os.path.join(base_path, rel_path)
+
+
 if __name__ == '__main__':
     eel.init('web')
-    eel.browsers.set_path('electron', 'node_modules/electron/dist/electron')
+    eel.browsers.set_path('electron', resource_path('node_modules\electron\dist\electron.exe'))
     eel.start('index.html', mode='electron')

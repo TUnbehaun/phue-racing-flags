@@ -12,6 +12,10 @@ __pycache__/*
 external/__pycache__/*
 external/modified/__pycache__/*
 sims/__pycache__/*
+eel/__pycache__/*
+
+# python-specific files
+**/*.pyo
 
 # build files
 build

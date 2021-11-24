@@ -1,4 +1,5 @@
 const {app, BrowserWindow} = require('electron')
+const path = require('path')
 
 let mainWindow
 
@@ -6,7 +7,8 @@ function createWindow () {
     mainWindow = new BrowserWindow({
         width: 1440,
         height: 900,
-        icon: 'images/icon.ico',
+        title: 'phue-racing-flags',
+        icon: path.join(__dirname, 'icon.ico'),
         webPreferences: {
             nodeIntegration: true
         },
