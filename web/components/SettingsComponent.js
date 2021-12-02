@@ -1,6 +1,12 @@
 export default {
     template: `
         <div>
+        
+            <div v-if="showNotification" class="notification is-warning custom-notification">
+                <button v-on:click="closeNotification" class="delete"></button>
+                <strong>Warning:</strong> No lights are selected!
+            </div>
+        
             <section class="section">
               <h2 class="title">Philips Hue</h2>
               <label class="label">Bridge IP</label>
@@ -98,6 +104,11 @@ export default {
             </section>
         </div>
     `,
+    data() {
+        let showNotification = false;
+
+        return { showNotification }
+    },
     computed: {
         connectionWorks: {
             get() {
@@ -160,7 +171,14 @@ export default {
             eel.sync_and_save_hue_connection(this.$store.state.hueConnection);
         },
         testLight: function (key) {
-            eel.test_light(key);
+            if (this.selectedLights.length === 0) {
+                this.showNotification = true;
+            } else {
+                eel.test_light(key);
+            }
+        },
+        closeNotification: function () {
+            this.showNotification = false;
         }
     }
 }
