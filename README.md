@@ -22,6 +22,12 @@
     <a href="https://github.com/TUnbehaun/phue-racing-flags/issues">Report Bug</a>
     ·
     <a href="https://github.com/TUnbehaun/phue-racing-flags/issues">Request Feature</a>
+    <br />
+    <br />
+    <a href="https://www.buymeacoffee.com/dltu" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/arial-yellow.png" alt="Buy Me A Coffee" width="200px" ></a>
+    <br />
+    <br />
+    Hey 👋 I'm Tim and I love to develop free and open source apps like phue-racing-flags.<br/>All donations are greatly appreciated and directly support my work.
   </p>
 </p>
 
@@ -35,7 +41,7 @@
         <li><a href="#built-with">Built With</a></li>
       </ul>
     </li>
-    <li><a href="#supported-systems-and-racing-simulators">Supported Systems and Racing Simulators</a></li>
+    <li><a href="#supported-systems-and-racing-simulations">Supported Systems and Racing Simulations</a></li>
     <li>
       <a href="#local-development">Local Development</a>
       <ul>
@@ -45,8 +51,6 @@
       </ul>
     </li>
     <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
     <li><a href="#acknowledgements">Acknowledgements</a></li>
@@ -57,18 +61,20 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-<img src="https://user-images.githubusercontent.com/12392728/122672511-1cb3a180-d1cc-11eb-86a0-a48581a5f507.PNG" alt="Main Screen" width="600" height="auto">
-<img src="https://user-images.githubusercontent.com/12392728/122672513-1f15fb80-d1cc-11eb-962d-f92a2a063c72.PNG" alt="Settings Screen" width="600" height="auto">
+<img src="./images/capture_main.PNG" alt="Main Screen" width="600" height="auto">
+<img src="./images/capture_settings.PNG" alt="Settings Screen" width="600" height="auto">
 
-One Friday evening I thought to myself that it would be pretty sweet to use my Philips Hue lights as indicators for the racing flags inside of Assetto Corsa Competizione. As no app was available to achieve this, I decided to take matters into my own hands and create one.
+One Friday evening I thought to myself that it would be pretty cool to use my Philips Hue lights as indicators for the racing flags inside of Assetto Corsa Competizione. As no app was available to achieve this, I decided to take matters into my own hands and create one.
 
 ### Built With
 
 * [Python](https://www.python.org/)
+* [Electron](https://www.electronjs.org/)
+* [Vue.js](https://vuejs.org/)
 
-## Supported Systems and Racing Simulators
+## Supported Systems and Racing Simulations
 
-The app is designed for Windows and currently supports the following racing simulators:
+The app is designed for Windows and currently supports the following racing simulations:
 * [Assetto Corsa](https://www.assettocorsa.it/home-ac/)
 * [Assetto Corsa Competizione](https://www.assettocorsa.it/competizione/)
 * [iRacing](https://www.iracing.com/)
@@ -76,12 +82,13 @@ The app is designed for Windows and currently supports the following racing simu
 <!-- GETTING STARTED -->
 ## Local Development
 
-To get a local development copy up and running follow these simple steps.
+To get a local development copy up and running, follow these simple steps.
 
 ### Prerequisites
 
-* Python
-  https://www.python.org/downloads/
+* [Python](https://www.python.org/downloads/)
+* [Node.js / npm](https://nodejs.org/en/download/)
+  
 
 ### Installation
 
@@ -89,11 +96,17 @@ To get a local development copy up and running follow these simple steps.
    ```sh
    git clone https://github.com/TUnbehaun/phue-racing-flags.git
    ```
+
+* Install Electron via npm
+   ```sh
+   npm install
+   ```
+
 ### Run the app
 
 * Start the GUI
   ```sh
-   python gui.py
+   python web.py
    ```
 
 <!-- USAGE EXAMPLES -->
@@ -102,38 +115,22 @@ To get a local development copy up and running follow these simple steps.
 To just use the app itself without setting up a local development copy, you can follow these simple steps:
 
 1. Download the latest .exe file from here: https://github.com/TUnbehaun/phue-racing-flags/releases/latest/download/phue-racing-flags.exe
-2. Run the .exe file
+2. If you have already used a previous version, make sure to delete any existing phue-rf-save.json files, to ensure compatibility with the newest version.
+3. Run the .exe file
 
 Once the app is started, you can use it the following way:
 
-1. Enter the IP Address of your Philips Hue Bridge under Settings -> General -> Bridge IP.
+1. Enter the IP Address of your Philips Hue Bridge under <strong>Settings -> Philips Hue -> Bridge IP</strong>.
 (You can find the IP Address of your Bridge in the interface of your Router)
-2. Press the (hardware) link button on your Philips Hue Bridge and then within 30 seconds hit the "Connect" button in the app.
+2. Press the (hardware) link button on your Philips Hue Bridge and then within 30 seconds hit the "Connect" button next to the Bridge IP input field.
 (Pressing the (hardware) link button on your Philips Hue Bridge is only necessary for the very first time you connect the app to a new Bridge)
-3. You should be able to choose one or multiple of your lights under Settings -> General -> Lights to use as the Racing Flag Light(s)
+3. You should be able to choose one or multiple of your lights under <strong>Settings -> Philips Hue -> Lights</strong> to use as the Racing Flag Light(s)
 4. Adjust brightness if needed.
-5. Use the live sync setting to enable live sync on app startup.
-6. Custom colors for your lights can be set under Settings -> Assetto Corsa / Assetto Corsa Competizione / iRacing respectively.
-7. Test your color configuration by using the Test buttons next to each flag.
-8. On the main view you can use the radio buttons under "sim" to switch between Assetto Corsa, Assetto Corsa Competizione or iRacing.
-9. To start syncing the Racing Flag Light(s) with your simulator's race flag click "Start" under "live sync".
-10. To stop syncing the Racing Flag Light(s) click "Stop" under "live sync".
-
-<!-- ROADMAP -->
-## Roadmap
-
-See the [open issues](https://github.com/TUnbehaun/phue-racing-flags/issues) for a list of proposed features (and known issues).
-
-<!-- CONTRIBUTING -->
-## Contributing
-
-Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**.
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+5. Custom colors for your lights can be set under <strong>Settings -> Flags -> Flag Colors</strong> respectively.
+6. Test your color configuration by using the Test buttons next to each flag.
+7. On the main view you can use the cards to switch syncing between Assetto Corsa, Assetto Corsa Competizione or iRacing.
+8. To start syncing the Racing Flag Light(s) with your simulation's race flag click "Start" in the live sync banner.
+9. To stop syncing the Racing Flag Light(s) click "Stop".
 
 <!-- LICENSE -->
 ## License
@@ -143,7 +140,7 @@ Distributed under the MIT License. See `LICENSE` for more information.
 <!-- CONTACT -->
 ## Contact
 
-Tim Unbehaun - tim@defacto.cool
+Tim Unbehaun - tim@dltu.de
 
 Project Link: [https://github.com/TUnbehaun/phue-racing-flags](https://github.com/TUnbehaun/phue-racing-flags)
 
@@ -151,14 +148,20 @@ Project Link: [https://github.com/TUnbehaun/phue-racing-flags](https://github.co
 ## Acknowledgements
 
 * [phue](https://github.com/studioimaginaire/phue)
-* [PySimpleGui](https://github.com/PySimpleGUI/PySimpleGUI)
+* [Eel](https://github.com/ChrisKnott/Eel)
 * [PyInstaller](http://www.pyinstaller.org/)
 * [pyirsdk](https://github.com/kutu/pyirsdk)
 * [hue-python-rgb-converter](https://github.com/benknight/hue-python-rgb-converter)
 
 ## Disclaimer
 
-I am in no way affiliated with Philips, Kunos Simulazioni or iRacing.
+This app is not an official product endorsed by Philips, Kunos Simulazioni or iRacing and I am in no way affiliated with them. The images used in the main screen of the app are in-game screenshots from the respective simulations and I explicitly asked for permission, before I included them.
+
+"Hue Personal Wireless Lighting" is a trademark owned by Koninklijke Philips Electronics N.V.
+
+"Assetto Corsa" and "Assetto Corsa Competizione" are trademarks owned by Kunos Simulazioni S.r.l.
+
+"iRacing" is a trademark owned by iRacing.com Motorsport Simulations, LLC
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->

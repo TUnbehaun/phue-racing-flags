@@ -10,7 +10,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      
+
       - name: Check Python Version
         run: python --version
       - name: Check pip Version
@@ -19,8 +19,12 @@ jobs:
         run: pip install pyinstaller
       - name: Check PyInstaller Version
         run: pyinstaller --version
+      - name: Check npm Version
+        run: npm --version
+      - name: Install electron via npm
+        run: npm install
       - name: Create .exe File
-        run: pyinstaller --noconsole --onefile --name "phue-racing-flags" --add-data "images/icon.ico;images" gui.py
+        run: pyinstaller web.py --add-data "eel;eel" --add-data "web;web" --add-data "node_modules/electron/dist;node_modules/electron/dist" --add-data "main.js;node_modules/electron/dist/resources/app" --add-data "package.json;node_modules/electron/dist/resources/app" --add-data="images/icon.ico;node_modules/electron/dist/resources/app"  --onefile --noconsole --name "phue-racing-flags" --icon="images/icon.ico"
       - name: Bump Version and Push Tag
         id: tag_version
         uses: mathieudutour/github-tag-action@v5.5
