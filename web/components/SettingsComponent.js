@@ -2,7 +2,7 @@ export default {
     template: `
         <div>
             <section class="section">
-              <h1 class="title">Philips Hue</h1>
+              <h2 class="title">Philips Hue</h2>
               <label class="label">Bridge IP</label>
               <div class="field has-addons">
                 <div class="control">
@@ -49,7 +49,7 @@ export default {
             
             
             <section class="section">
-                <h1 class="title">Flags</h1>
+                <h2 class="title">Flags</h2>
                 <label class="label">Flag Colors</label>
                 <table class="table is-fullwidth is-striped">
                     <thead>
@@ -79,12 +79,22 @@ export default {
             
             
             <section class="section">
-              <h1 class="title">Startup</h1>
+              <h2 class="title">Startup</h2>
               <label class="label">Live Sync</label>
               <label class="checkbox">
                 <input v-model="syncOnStartup" type="checkbox">
                 Enable live sync on startup
               </label>
+            </section>
+            
+            
+            <section class="section">
+                <h2 class="title">Disclaimer</h2>
+                <p>This app is not an official product endorsed by Philips, Kunos Simulazioni or iRacing and I am in no way affiliated with them. The images used in the main screen of the app are in-game screenshots from the respective simulations and I explicitly asked for permission, before I included them.</p>
+                <br>
+                <p>"Hue Personal Wireless Lighting" is a trademark owned by Koninklijke Philips Electronics N.V.</p>
+                <p>"Assetto Corsa" and "Assetto Corsa Competizione" are trademarks owned by Kunos Simulazioni S.r.l.</p>
+                <p>"iRacing" is a trademark owned by iRacing.com Motorsport Simulations, LLC</p>
             </section>
         </div>
     `,

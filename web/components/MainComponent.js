@@ -45,7 +45,7 @@ export default {
                             <div :class="{ selectedCard: selectedSim === 'AC' }" v-on:click="selectSim('AC')" class="card is-clickable">
                               <div class="card-image">
                                 <figure class="image">
-                                  <img src="../assets/ac.jpg" alt="Placeholder image">
+                                  <img style="pointer-events: none;" src="../assets/ac.jpg" alt="Placeholder image">
                                 </figure>
                               </div>
                               <div class="card-content content">
@@ -57,7 +57,7 @@ export default {
                             <div :class="{ selectedCard: selectedSim === 'ACC' }" v-on:click="selectSim('ACC')" class="card is-clickable">
                               <div class="card-image">
                                 <figure class="image">
-                                  <img src="../assets/acc.jpg" alt="Placeholder image">
+                                  <img style="pointer-events: none;" src="../assets/acc.png" alt="Placeholder image">
                                 </figure>
                               </div>
                               <div class="card-content content">
@@ -69,7 +69,7 @@ export default {
                             <div :class="{ selectedCard: selectedSim === 'iRacing' }" v-on:click="selectSim('iRacing')" class="card is-clickable">
                               <div class="card-image">
                                 <figure class="image">
-                                  <img src="../assets/iracing.jpg" alt="iRacing image">
+                                  <img style="pointer-events: none;" src="../assets/iracing.jpg" alt="iRacing image">
                                 </figure>
                               </div>
                               <div class="card-content content">

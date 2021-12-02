@@ -48,6 +48,9 @@ def init_bridge_connection():
     eel.mutate_connection_works(bridge_connection_works())
     eel.mutate_hue_connection(HUE_CONNECTION)
     eel.mutate_available_lights(get_lights_from_bridge(Bridge(HUE_CONNECTION['ip'])))
+    if HUE_CONNECTION['auto_sync']:
+        eel.mutate_live_sync_running(True)
+        start_sync()
 
 
 @eel.expose

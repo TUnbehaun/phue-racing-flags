@@ -50,3 +50,8 @@ eel.expose(mutate_available_lights)
 function mutate_available_lights(availableLights) {
     store.commit('setAvailableLights', availableLights);
 }
+
+eel.expose(mutate_live_sync_running)
+function mutate_live_sync_running(liveSyncRunning) {
+    store.commit('setLiveSyncRunning', liveSyncRunning);
+}

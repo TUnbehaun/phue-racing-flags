@@ -1,3 +1,7 @@
+* {
+    user-select: none;
+}
+
 .selectedCard {
     border: 8px solid #485fc7;
 }
