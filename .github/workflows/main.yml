@@ -19,6 +19,8 @@ jobs:
         run: pip install pyinstaller
       - name: Check PyInstaller Version
         run: pyinstaller --version
+      - name: Install Eel
+        run: pip install eel
       - name: Check npm Version
         run: npm --version
       - name: Install electron via npm
