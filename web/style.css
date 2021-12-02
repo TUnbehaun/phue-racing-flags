@@ -5,3 +5,10 @@
 .selectedCard {
     border: 8px solid #485fc7;
 }
+
+.custom-notification {
+    position: fixed !important;
+    top: 10px;
+    right: 10px;
+    z-index: 300;
+}
