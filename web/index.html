@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>phue-racing-flags</title>
+    <link rel="shortcut icon" type="image/x-icon" href="./assets/icon.ico">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="vendor/bulma/bulma.min.css">
+    <link rel="stylesheet" href="vendor/bulma/bulma-extensions.min.css">
+    <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
+    <script type="application/javascript" src="vendor/vue/vue.global.js"></script>
+    <script type="application/javascript" src="vendor/vue/vuex.global.js"></script>
+    <script type="application/javascript" src="vendor/vue/vue-router.global.js"></script>
+    <script type="application/javascript" src="vendor/bulma/bulma-extensions.min.js"></script>
+    <script type="application/javascript" src="eel.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <app-navigation-component></app-navigation-component>
+      <div class="container">
+        <router-view></router-view>
+      </div>
+    </div>
+  </body>
+  <script type="module" src="app.js"></script>
+</html>

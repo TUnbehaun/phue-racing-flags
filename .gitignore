@@ -4,11 +4,25 @@
 # venv
 venv
 
+# npm
+node_modules
+
 # cached files
 __pycache__/*
 external/__pycache__/*
 external/modified/__pycache__/*
 sims/__pycache__/*
+eel/__pycache__/*
+
+# python-specific files
+**/*.pyo
+
+# build files
+build
+dist
+phue-racing-flags.spec
+eel.spec
+web.spec
 
 # project-specific files
 phue-rf-save.json

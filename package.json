@@ -1,0 +1,22 @@
+{
+  "name": "phue-racing-flags",
+  "version": "1.0.0",
+  "description": "Use your Philips Hue lights as Racing Flags.",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TUnbehaun/phue-racing-flags.git"
+  },
+  "author": "TUnbehaun",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/TUnbehaun/phue-racing-flags/issues"
+  },
+  "homepage": "https://github.com/TUnbehaun/phue-racing-flags#readme",
+  "dependencies": {
+    "electron": "^16.0.1"
+  }
+}
