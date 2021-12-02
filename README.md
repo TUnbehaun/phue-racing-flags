@@ -97,6 +97,11 @@ To get a local development copy up and running, follow these simple steps.
    git clone https://github.com/TUnbehaun/phue-racing-flags.git
    ```
 
+* Install Eel via pip
+   ```sh
+   pip install eel
+   ```
+
 * Install Electron via npm
    ```sh
    npm install
@@ -115,7 +120,7 @@ To get a local development copy up and running, follow these simple steps.
 To just use the app itself without setting up a local development copy, you can follow these simple steps:
 
 1. Download the latest .exe file from here: https://github.com/TUnbehaun/phue-racing-flags/releases/latest/download/phue-racing-flags.exe
-2. If you have already used a previous version, make sure to delete any existing phue-rf-save.json files, to ensure compatibility with the newest version.
+2. If you have already used a previous version, make sure to delete any existing phue-rf-save.json or prf-save.json files, to ensure compatibility with the newest version.
 3. Run the .exe file
 
 Once the app is started, you can use it the following way:
