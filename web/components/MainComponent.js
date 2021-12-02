@@ -1,6 +1,12 @@
 export default {
     template: `
         <div>
+        
+            <div v-if="showNotification" class="notification is-warning custom-notification">
+                <button v-on:click="closeNotification" class="delete"></button>
+                <strong>Warning:</strong> No lights are selected!
+            </div>
+        
             <section v-if="!connectionWorks" class="hero is-danger">
               <div class="hero-body">
                 <p class="title">
@@ -82,6 +88,11 @@ export default {
             </div>
         </div>
     `,
+    data() {
+        let showNotification = false;
+
+        return { showNotification }
+    },
     computed: {
         connectionWorks: {
             get() {
@@ -97,6 +108,11 @@ export default {
             get() {
                 return this.$store.state.hueConnection.sim;
             }
+        },
+        selectedLights: {
+            get() {
+                return this.$store.state.hueConnection.lights;
+            }
         }
     },
     methods: {
@@ -106,12 +122,19 @@ export default {
             eel.sync_and_save_hue_connection(this.$store.state.hueConnection);
         },
         startLiveSync: function () {
-            this.$store.commit('setLiveSyncRunning', true);
-            eel.start_sync();
+            if (this.selectedLights.length === 0) {
+                this.showNotification = true;
+            } else {
+                this.$store.commit('setLiveSyncRunning', true);
+                eel.start_sync();
+            }
         },
         stopLiveSync: function () {
             this.$store.commit('setLiveSyncRunning', false);
             eel.stop_sync();
+        },
+        closeNotification: function () {
+            this.showNotification = false;
         }
     }
 }
