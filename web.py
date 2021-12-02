@@ -20,7 +20,7 @@ GUI_COLOR_PENALTY_FLAG = '#b71c1c'
 GUI_COLOR_GREEN_FLAG = '#388E3C'
 GUI_COLOR_ORANGE_FLAG = '#FF6F00'
 
-SAVE_FILE_PATH = './phue-rf-save.json'
+SAVE_FILE_PATH = './prf-save.json'
 HUE_CONNECTION = {
     'ip': '',
     'lights': [],
