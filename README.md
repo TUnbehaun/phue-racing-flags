@@ -24,10 +24,6 @@
     <a href="https://github.com/TUnbehaun/phue-racing-flags/issues">Request Feature</a>
     <br />
     <br />
-    <a href="https://www.buymeacoffee.com/dltu" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/arial-yellow.png" alt="Buy Me A Coffee" width="200px" ></a>
-    <br />
-    <br />
-    Hey 👋 I'm Tim and I love to develop free and open source apps like phue-racing-flags.<br/>All donations are greatly appreciated and directly support my work.
   </p>
 </p>
 
@@ -144,8 +140,6 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 <!-- CONTACT -->
 ## Contact
-
-Tim Unbehaun - tim@dltu.de
 
 Project Link: [https://github.com/TUnbehaun/phue-racing-flags](https://github.com/TUnbehaun/phue-racing-flags)
 
